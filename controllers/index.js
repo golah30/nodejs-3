@@ -2,25 +2,20 @@ const nodemailer = require('nodemailer');
 const config = require('../config.json');
 
 module.exports.getIndex = (req, res, next) => {
-  if (req.query.mail) {
-    const msg =
-      req.query.mail === '1'
-        ? 'Необходимо заполнить все поля'
-        : req.query.mail === '2'
-          ? 'При отправке письма произошла ошибка'
-          : 'Сообщение отправлено';
-    res.render('pages/index', {
-      title: 'Home page',
-      msgemail: msg
-    });
-  } else {
-    res.render('pages/index', { title: 'Home page' });
+  const msg = req.flash('msgemail');
+  let prop = {
+    title: 'Home page'
+  };
+  if (msg.lenght !== 0) {
+    prop.msgemail = msg[0];
   }
+  res.render('pages/index', prop);
 };
 
 module.exports.sendEmail = (req, res) => {
   if (!req.body.name || !req.body.email || !req.body.message) {
-    return res.status(403).redirect('/?mail=1#mail');
+    req.flash('msgemail', 'Необходимо заполнить все поля');
+    return res.redirect('/#mail');
   }
 
   let transporter = nodemailer.createTransport(config.mail.smtp);
@@ -36,8 +31,10 @@ module.exports.sendEmail = (req, res) => {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
-      return res.status(500).redirect('/?mail=2#mail');
+      req.flash('msgemail', 'При отправке письма произошла ошибка');
+      return res.redirect('/#mail');
     }
-    res.redirect('/?mail=3#mail');
+    req.flash('msgemail', 'Сообщение отправлено');
+    res.redirect('/#mail');
   });
 };

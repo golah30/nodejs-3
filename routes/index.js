@@ -20,6 +20,7 @@ router.get('/', ctrlHome.getIndex);
 router.post('/', ctrlHome.sendEmail);
 
 router.get('/admin', isAdmin, ctrlAdmin.getAdmin);
+router.post('/admin/skills', isAdmin, ctrlAdmin.setSkills);
 
 router.post('/login', ctrlLogin.login);
 router.get('/login', ctrlLogin.getLogin);
