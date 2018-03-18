@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const config = require('../config.json');
+const db = require('./db.js');
 
 module.exports.getIndex = (req, res, next) => {
   const msg = req.flash('msgemail');
@@ -9,6 +10,7 @@ module.exports.getIndex = (req, res, next) => {
   if (msg.lenght !== 0) {
     prop.msgemail = msg[0];
   }
+  prop.skills = db.getSkillsFromdb();
   res.render('pages/index', prop);
 };
 
