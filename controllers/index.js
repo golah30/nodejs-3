@@ -11,6 +11,7 @@ module.exports.getIndex = (req, res, next) => {
     prop.msgemail = msg[0];
   }
   prop.skills = db.getSkillsFromdb();
+  prop.products = db.getProductsFromdb();
   res.render('pages/index', prop);
 };
 

@@ -7,6 +7,9 @@ const skillsdb = low(sAdapter);
 const adapter = new FileSync('dbs/udb.json');
 const udb = low(adapter);
 
+const gAdapter = new FileSync('dbs/gdb.json');
+const goodsdb = low(gAdapter);
+
 function updateSkill (field) {
   skillsdb
     .get('skills')
@@ -72,4 +75,15 @@ module.exports.getSkillsFromdb = () => {
   skills[2].number = cities;
   skills[3].number = years;
   return skills;
+};
+
+module.exports.setProduct = (name, price, dir) => {
+  goodsdb
+    .get('products')
+    .push({ src: dir, name: name, price: price })
+    .write();
+};
+
+module.exports.getProductsFromdb = () => {
+  return goodsdb.get('products').value();
 };

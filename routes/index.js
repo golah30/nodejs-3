@@ -21,6 +21,7 @@ router.post('/', ctrlHome.sendEmail);
 
 router.get('/admin', isAdmin, ctrlAdmin.getAdmin);
 router.post('/admin/skills', isAdmin, ctrlAdmin.setSkills);
+router.post('/admin/upload', isAdmin, ctrlAdmin.setProduct);
 
 router.post('/login', ctrlLogin.login);
 router.get('/login', ctrlLogin.getLogin);
