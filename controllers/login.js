@@ -1,8 +1,4 @@
-const low = require('lowdb');
-const FileSync = require('lowdb/adapters/FileSync');
-
-const adapter = new FileSync('dbs/udb.json');
-const udb = low(adapter);
+const db = require('./db.js');
 
 module.exports.getLogin = (req, res, next) => {
   if (req.session.isAdmin) {
@@ -19,8 +15,8 @@ module.exports.login = (req, res, next) => {
     });
   }
 
-  if (udb.has('admin').value()) {
-    const { login, password } = udb.get('admin').value();
+  if (db.hasProperty('udb', 'admin')) {
+    const { login, password } = db.getProperty('udb', 'admin');
 
     if (req.body.email === login && req.body.password === password) {
       req.session.isAdmin = true;

@@ -4,6 +4,49 @@ const FileSync = require('lowdb/adapters/FileSync');
 const sAdapter = new FileSync('dbs/sdb.json');
 const skillsdb = low(sAdapter);
 
+const adapter = new FileSync('dbs/udb.json');
+const udb = low(adapter);
+
+function updateSkill (field) {
+  skillsdb
+    .get('skills')
+    .assign(field)
+    .write();
+}
+module.exports.setSkills = body => {
+  if (skillsdb.has('skills').value()) {
+    if (body.age) {
+      updateSkill({ age: body.age });
+    }
+    if (body.concerts) {
+      updateSkill({ concerts: body.concerts });
+    }
+    if (body.cities) {
+      updateSkill({ cities: body.cities });
+    }
+    if (body.years) {
+      updateSkill({ years: body.years });
+    }
+    return 'Updated';
+  } else {
+    console.error('Database error: property skills is not defined');
+    return 'Database error';
+  }
+};
+module.exports.hasProperty = (db, name) => {
+  if (db === 'udb') {
+    return udb.has(name).value();
+  } else {
+    return false;
+  }
+};
+module.exports.getProperty = (db, name) => {
+  if (db === 'udb') {
+    return udb.get(name).value();
+  } else {
+    return false;
+  }
+};
 module.exports.getSkillsFromdb = () => {
   let skills = [
     {
